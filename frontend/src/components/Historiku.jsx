@@ -73,13 +73,14 @@ const Historiku = () => {
 
    // Filtrimi i pacientëve bazuar në searchTerm
   const filteredPacientet = pacientet.filter((p) => {
-    const term = searchTerm.toLowerCase().replace(/\s/g, ''); // hiq hapësirat
-    return (
-      p.name.toLowerCase().includes(term) ||
-      p.surname.toLowerCase().includes(term) ||
-      p.cardnumber.startsWith(term) // ndryshimi kryesor
-    );
-  });
+  const terms = searchTerm.toLowerCase().split(" ").filter(t => t); // nda dhe hiq fjalët bosh
+  return terms.every(term =>
+    p.name.toLowerCase().includes(term) ||
+    p.surname.toLowerCase().includes(term) ||
+    p.cardnumber.startsWith(term) // mund të përdorësh startsWith nëse don
+  );
+});
+
 
   return (
     <div className="container-fluid vh-100 d-flex justify-content-center align-items-center">
@@ -114,7 +115,7 @@ const Historiku = () => {
           </div>
           
           <p style={{ marginTop: "10px", fontSize: "1rem" }}>
-            Total: {filteredPacientet.length} pacient{filteredPacientet.length !== 1 ? 'ë' : ''}
+            Total: {filteredPacientet.length} 
           </p>
         </div>
 

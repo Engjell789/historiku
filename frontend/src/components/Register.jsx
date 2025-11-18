@@ -145,58 +145,58 @@ const Pacienti = () => {
               </div>
               {/* Datelindja */}
               {/* Datelindja (vetëm për UI, dërgon birthday si një string) */}
-<div className="col-12 col-sm-6">
-  <div className="d-flex gap-2">
+              <div className="col-12 col-sm-6">
+                <div className="d-flex gap-2">
 
-    {/* Dita */}
-    <select
-      name="day"
-      className="form-control"
-      value={formData.day || ""}
-      onChange={handleChange}
-    >
-      <option value="">Dita</option>
-      {[...Array(31)].map((_, i) => (
-        <option key={i+1} value={i+1}>{i+1}</option>
-      ))}
-    </select>
+                  {/* Dita */}
+                  <select
+                    name="day"
+                    className="form-control"
+                    value={formData.day || ""}
+                    onChange={handleChange}
+                  >
+                    <option value="">Dita</option>
+                    {[...Array(31)].map((_, i) => (
+                      <option key={i+1} value={i+1}>{i+1}</option>
+                    ))}
+                  </select>
 
-    {/* Muaji */}
-    <select
-      name="month"
-      className="form-control"
-      value={formData.month || ""}
-      onChange={handleChange}
-    >
-      <option value="">Muaji</option>
-      <option value="1">Janar</option>
-      <option value="2">Shkurt</option>
-      <option value="3">Mars</option>
-      <option value="4">Prill</option>
-      <option value="5">Maj</option>
-      <option value="6">Qershor</option>
-      <option value="7">Korrik</option>
-      <option value="8">Gusht</option>
-      <option value="9">Shtator</option>
-      <option value="10">Tetor</option>
-      <option value="11">Nëntor</option>
-      <option value="12">Dhjetor</option>
-    </select>
+                  {/* Muaji */}
+                  <select
+                    name="month"
+                    className="form-control"
+                    value={formData.month || ""}
+                    onChange={handleChange}
+                  >
+                    <option value="">Muaji</option>
+                    <option value="1">Janar</option>
+                    <option value="2">Shkurt</option>
+                    <option value="3">Mars</option>
+                    <option value="4">Prill</option>
+                    <option value="5">Maj</option>
+                    <option value="6">Qershor</option>
+                    <option value="7">Korrik</option>
+                    <option value="8">Gusht</option>
+                    <option value="9">Shtator</option>
+                    <option value="10">Tetor</option>
+                    <option value="11">Nëntor</option>
+                    <option value="12">Dhjetor</option>
+                  </select>
 
-    {/* Viti */}
-    <select
-      name="year"
-      className="form-control"
-      value={formData.year || ""}
-      onChange={handleChange}
-    >
-      <option value="">Viti</option>
-      {Array.from({ length: 120 }, (_, i) => 2025 - i).map((year) => (
-        <option key={year} value={year}>{year}</option>
-      ))}
-    </select>
-  </div>
-</div>
+                  {/* Viti */}
+                  <select
+                    name="year"
+                    className="form-control"
+                    value={formData.year || ""}
+                    onChange={handleChange}
+                  >
+                    <option value="">Viti</option>
+                    {Array.from({ length: 120 }, (_, i) => 2025 - i).map((year) => (
+                      <option key={year} value={year}>{year}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
 
               <div className="col-12 col-sm-6">
                 <input 
@@ -222,14 +222,17 @@ const Pacienti = () => {
               <div className="col-3" style={{ marginTop: "40px" }}>
               <div className="input-group">
                 <input
-                  type="number"
+                  type="text" // jo number
                   name="price"
                   value={formData.price}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (/^\d*$/.test(val)) { // lejon vetëm numra
+                      handleChange(e);
+                    }
+                  }}
                   className="form-control"
                   placeholder="Çmimi"
-                  min="0"
-                  step="1"
                 />
                 <span className="input-group-text">€</span>
               </div>
