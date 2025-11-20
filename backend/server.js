@@ -9,7 +9,7 @@ app.use(cors({
   methods: ["GET", "POST", "DELETE"],
   credentials: true // nëse përdor cookies (opsional)
 }));
-app.options("*", cors()); // lejon OPTIONS për të gjitha rruget
+
 
 
 app.use(bodyParser.json());
