@@ -4,7 +4,12 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: "https://historiku-frontend.onrender.com", // vendos linkun e frontend-it të Render
+  methods: ["GET", "POST", "DELETE"],
+  credentials: true // nëse përdor cookies (opsional)
+}));
+
 app.use(bodyParser.json());
 const PORT = process.env.PORT || 5000;
 
