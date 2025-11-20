@@ -9,12 +9,12 @@ app.use(bodyParser.json());
 const PORT = process.env.PORT || 5000;
 
 
-mongoose.connect(
-  "mongodb+srv://clinic_admin:EngjellClinic2025$@cliniccluster.em5ecsn.mongodb.net/clinic_db?retryWrites=true&w=majority",
-  { useNewUrlParser: true, useUnifiedTopology: true }
-)
-.then(() => console.log("✅ Lidhja me MongoDB u realizua me sukses!"))
-.catch(err => console.log("Gabim në lidhje:", err));
+const MONGO_URI = process.env.MONGODB_URI;
+
+mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("✅ Lidhja me MongoDB u realizua me sukses!"))
+  .catch(err => console.log("Gabim në lidhje:", err));
+
 
 //Import modelin e pacientëve
 const Pacient = require("./pacientetSchema");
