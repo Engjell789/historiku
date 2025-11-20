@@ -1,84 +1,64 @@
 const express = require("express");
-const mysql = require("mysql2");
 const cors = require("cors");
+const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
+const PORT = process.env.PORT || 5000;
 
-const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "clinic_db"
+
+mongoose.connect(
+  "mongodb+srv://clinic_admin:EngjellClinic2025$@cliniccluster.em5ecsn.mongodb.net/clinic_db?retryWrites=true&w=majority",
+  { useNewUrlParser: true, useUnifiedTopology: true }
+)
+.then(() => console.log("✅ Lidhja me MongoDB u realizua me sukses!"))
+.catch(err => console.log("Gabim në lidhje:", err));
+
+//Import modelin e pacientëve
+const Pacient = require("./pacientetSchema");
+
+//  POST – regjistrimi i pacientit
+app.post("/api/pacientet", async (req, res) => {
+  const { name, surname, cardnumber, birthday, city, service, price } = req.body;
+  const date = new Date().toISOString().slice(0, 10);
+
+  try {
+    const pacient = new Pacient({ name, surname, cardnumber, birthday, city, service, price, date });
+    await pacient.save();
+    res.send("✅ Pacienti u regjistrua me sukses!");
+  } catch (err) {
+    console.log("Gabim:", err);
+    res.status(500).send("Gabim gjatë regjistrimit!");
+  }
 });
 
-db.connect(err => {
-  if (err) {
-    console.log("Gabim në lidhje:", err);
-  } else {
-    console.log("✅ Lidhja me MySQL u realizua me sukses!");
+// GET – marrja e të gjithë pacientëve
+app.get("/api/pacientet", async (req, res) => {
+  try {
+    const pacientet = await Pacient.find().sort({ _id: -1 });
+    res.json(pacientet);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Gabim gjatë marrjes së të dhënave");
+  }
+});
+
+// ➤ DELETE – fshirja e pacientit
+app.delete("/api/pacientet/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    await Pacient.findByIdAndDelete(id);
+    res.send("✅ Pacienti u fshi me sukses!");
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Gabim gjatë fshirjes!");
   }
 });
 
 
-// ➤ POST – regjistrimi i pacientit
-app.post("/api/pacientet", (req, res) => {
-  const { name, surname, cardnumber, birthday, city, service, price } = req.body;
-
-  // Data e sotme automatike
-  const date = new Date().toISOString().slice(0, 10);
-
-  const sql = `
-    INSERT INTO pacientet 
-    (name, surname, cardnumber, birthday, city, service, price, date)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-  `;
-
-  db.query(
-    sql,
-    [name, surname, cardnumber, birthday, city, service, price, date],
-    (err, result) => {
-      if (err) {
-        console.log("Gabim:", err);
-        return res.status(500).send("Gabim gjatë regjistrimit!");
-      }
-
-      res.send("✅ Pacienti u regjistrua me sukses!");
-    }
-  );
-});
-
-
-// ➤ GET – marrja e të gjithë pacientëve
-app.get("/api/pacientet", (req, res) => {
-  db.query("SELECT * FROM pacientet ORDER BY id DESC", (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).send("Gabim gjatë marrjes së të dhënave");
-    } else {
-      res.json(results);
-    }
-  });
-});
-
-
-// ➤ DELETE – fshirja e pacientit
-app.delete("/api/pacientet/:id", (req, res) => {
-  const { id } = req.params;
-
-  db.query("DELETE FROM pacientet WHERE id = ?", [id], (err, result) => {
-    if (err) {
-      res.status(500).send("Gabim gjatë fshirjes!");
-    } else {
-      res.send("✅ Pacienti u fshi me sukses!");
-    }
-  });
-});
-
-
 // ➤ Start serveri
-app.listen(5000, () => {
-  console.log("Serveri po funksionon në portin 5000...");
+app.listen(PORT, () => {
+  console.log(`Serveri po funksionon në portin ${PORT}...`);
 });
