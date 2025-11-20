@@ -9,6 +9,8 @@ app.use(cors({
   methods: ["GET", "POST", "DELETE"],
   credentials: true // nëse përdor cookies (opsional)
 }));
+app.options("*", cors()); // lejon OPTIONS për të gjitha rruget
+
 
 app.use(bodyParser.json());
 const PORT = process.env.PORT || 5000;
@@ -45,7 +47,7 @@ app.get("/api/pacientet", async (req, res) => {
     const pacientet = await Pacient.find().sort({ _id: -1 });
     res.json(pacientet);
   } catch (err) {
-    console.log(err);
+    console.error("Gabim gjatë marrjes së pacientëve:", err);
     res.status(500).send("Gabim gjatë marrjes së të dhënave");
   }
 });
