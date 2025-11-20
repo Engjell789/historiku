@@ -15,7 +15,7 @@ const Historiku = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/pacientet");
+        const res = await axios.get("https://historiku-backend.onrender.com/api/pacientet");
         setPacientet(res.data);
       } catch (err) {
         console.error("Gabim gjatë marrjes së të dhënave", err);
@@ -55,8 +55,8 @@ const Historiku = () => {
   const confirmDelete = async (id) => {
     toast.dismiss(); // mbyll pyetjen
     try {
-      await axios.delete(`http://localhost:5000/api/pacientet/${id}`);
-      setPacientet(pacientet.filter((p) => p.id !== id));
+      await axios.delete(`https://historiku-backend.onrender.com/api/pacientet/${id}`);
+      setPacientet(pacientet.filter((p) => p._id !== id));
       toast.success("Pacienti u fshi me sukses!", {
         position: "top-center",
         autoClose: 2000,
@@ -131,7 +131,7 @@ const Historiku = () => {
               {filteredPacientet.length > 0 ? (
                 filteredPacientet.map((p) => (
                   <div
-                    key={p.id}
+                    key={p._id}
                     className="shadow-sm p-3 mb-4 rounded position-relative"
                     style={{ border: "1px solid #dadada", backgroundColor: "#f8f9fa" }}
                   >
@@ -145,7 +145,7 @@ const Historiku = () => {
                         fontSize: "1.2rem",
                         cursor: "pointer",
                       }}
-                      onClick={() => handleDelete(p.id)}
+                      onClick={() => handleDelete(p._id)}
                       title="Fshij pacientin"
                     ></i>
 

@@ -60,7 +60,7 @@ const Pacienti = () => {
   };
 
   try {
-    await axios.post("http://localhost:5000/api/pacientet", submitData);
+    await axios.post("https://historiku-backend.onrender.com/api/pacientet", submitData);
 
     toast.success("Regjistrimi u krye me sukses!", {
       position: "top-center",
