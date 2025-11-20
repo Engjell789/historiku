@@ -56,7 +56,7 @@ const Pacienti = () => {
     birthday: formData.birthday,  // vetëm 1 fushë
     city: formData.city,
     service: formData.service,
-    price: formData.price,
+    price: Number(formData.price),
   };
 
   try {
