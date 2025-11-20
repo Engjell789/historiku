@@ -20,6 +20,16 @@ const Pacienti = () => {
     service: "",
     price: "",
   });
+  const [loading, setLoading] = useState(false);
+
+  
+  const Spinner = () => (
+    <div style={{ display: "flex", justifyContent: "center", padding: "15px" }}>
+      <div className="spinner-border" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  );
 
   const handleChange = (e) => {
   const { name, value } = e.target;
@@ -60,6 +70,7 @@ const Pacienti = () => {
   };
 
   try {
+    setLoading(true);
     await axios.post("https://historiku-backend.onrender.com/api/pacientet", submitData);
 
     toast.success("Regjistrimi u krye me sukses!", {
@@ -87,6 +98,8 @@ const Pacienti = () => {
       autoClose: 2000,
       theme: "colored",
     });
+  } finally {
+    setLoading(false);
   }
 };
 
@@ -239,7 +252,13 @@ const Pacienti = () => {
               </div>
 
               <div className="col-12 text-center">
-                <button onClick={handleSubmit} className="btn btn-dark px-5">Ruaj</button>
+                {loading ? (
+                  <div className="spinner-border text-dark" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                ) : (
+                  <button onClick={handleSubmit} className="btn btn-dark px-5">Ruaj</button>
+                )}
               </div>
             </div>
           </div>

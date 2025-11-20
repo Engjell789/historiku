@@ -10,15 +10,20 @@ const Historiku = () => {
   const navigate = useNavigate();
   const [pacientet, setPacientet] = useState([]);
   const [searchTerm, setSearchTerm] = useState(""); // inputi i search
+  const [loading, setLoading] = useState(false);
+
   
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const res = await axios.get("https://historiku-backend.onrender.com/api/pacientet");
         setPacientet(res.data);
       } catch (err) {
         console.error("Gabim gjatë marrjes së të dhënave", err);
+      }finally{
+        setLoading(false);
       }
     };
     fetchData();
@@ -128,7 +133,13 @@ const Historiku = () => {
           {/* Lista me të dhëna */}
           <div className="col-12 col-md-8">
             <div style={{ maxHeight: "325px", overflowY: "auto" }}>
-              {filteredPacientet.length > 0 ? (
+              {loading ? (
+                <div className="d-flex justify-content-center py-5">
+                  <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                </div>
+              ) : filteredPacientet.length > 0 ? (
                 filteredPacientet.map((p) => (
                   <div
                     key={p._id}
